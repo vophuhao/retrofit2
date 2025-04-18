@@ -25,8 +25,6 @@ public class VolleySingle {
     //Ham RequestQueue
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-// getApplicationContext() is key, it keeps you from Leaking the
-// Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue= Volley.newRequestQueue(mCtx.getApplicationContext());
         }
         return mRequestQueue;
@@ -35,4 +33,4 @@ public class VolleySingle {
     public <T> void addToRequestQueue (Request<T> req) {
         getRequestQueue().add(req);
     }
-    }
+}
