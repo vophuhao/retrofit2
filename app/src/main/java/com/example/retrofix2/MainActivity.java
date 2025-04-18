@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -35,10 +34,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        rvCate = (RecyclerView) findViewById(R.id.rc_categories);
+        rvCate = findViewById(R.id.rc_categories);
         cateList = new ArrayList<>();
+        // Khởi tạo adapter với danh sách rỗng
+        categoryAdapter = new CategoryAdapter(MainActivity.this, cateList);
+        rvCate.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvCate.setAdapter(categoryAdapter); // Gắn adapter ngay từ đầu
         GetCate();
+
     }
+
     public void GetCate(){
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getCategoryAll().enqueue(new Callback<List<Category>>() {
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if(response.isSuccessful()){
                     cateList = response.body();
+                    System.out.println(cateList);
                     categoryAdapter = new CategoryAdapter(MainActivity.this, cateList);
                     Log.d("Hello", "sss");
                     rvCate.setHasFixedSize(true);
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     int statusCode =  response.code();
-                    //Handle request errors depending on status code
+                    System.out.println("loi");
                 }
             }
 
